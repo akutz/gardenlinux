@@ -1,6 +1,6 @@
 import os
-import model
-import util
+import glci.model
+import glci.util
 
 
 def _s3_session(aws_cfg_name: str):
@@ -13,22 +13,22 @@ def _s3_session(aws_cfg_name: str):
 
 
 def s3_client_for_cfg_name(cicd_cfg_name: str):
-    cicd_cfg = util.cicd_cfg(cfg_name=cicd_cfg_name)
+    cicd_cfg = glci.util.cicd_cfg(cfg_name=cicd_cfg_name)
     aws_cfg_name = cicd_cfg.build.aws_cfg_name
     return _s3_session(aws_cfg_name).client('s3')
 
 
 def s3_resource_for_cfg_name(cicd_cfg_name: str):
-    cicd_cfg = util.cicd_cfg(cfg_name=cicd_cfg_name)
+    cicd_cfg = glci.util.cicd_cfg(cfg_name=cicd_cfg_name)
     aws_cfg_name = cicd_cfg.build.aws_cfg_name
     return _s3_session(aws_cfg_name).resource('s3')
 
 
-def s3_client(cicd_cfg: model.CicdCfg):
+def s3_client(cicd_cfg: glci.model.CicdCfg):
     return _s3_session(cicd_cfg.build.aws_cfg_name).client('s3')
 
 
-def s3_resource(cicd_cfg: model.CicdCfg):
+def s3_resource(cicd_cfg: glci.model.CicdCfg):
     return _s3_session(cicd_cfg.build.aws_cfg_name).resource('s3')
 
 
