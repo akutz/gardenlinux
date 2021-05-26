@@ -10,7 +10,7 @@ def upload_packages(
 ):
     cicd_cfg = glci.util.cicd_cfg(cfg_name=cicd_cfg_name)
     s3_bucket_name = cicd_cfg.build.s3_bucket_name
-    s3_resource = glci.s3.s3_client(cicd_cfg)
+    s3_resource = glci.s3.s3_resource(cicd_cfg)
 
     glci.s3.upload_dir(
         s3_resource=s3_resource,
