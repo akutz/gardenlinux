@@ -38,9 +38,8 @@ if wget -t1 -qO/dev/null http://localhost/$base/$archive/; then
 # this is for the snapshot cache ($base = archive)
 elif wget -t1 -qO/dev/null https://snapshot-cache.ci.gardener.cloud/gardenlinux/$base/$archive/; then
 	echo "https://snapshot-cache.ci.gardener.cloud/gardenlinux/$base/$archive/$t"
-# this is for the gardenlinux-local packages ($base = gardenlinux/)	
-elif wget -t1 -qO/dev/null https://snapshot-cache.ci.gardener.cloud/$base/; then
-	echo "https://snapshot-cache.ci.gardener.cloud/$base/"
+elif wget -t1 -qO/dev/null https://snapshot-cache.ci.gardener.cloud/$base/$archive/; then
+	echo "https://snapshot-cache.ci.gardener.cloud/$base/$archive/$t"
 else
 	echo "https://snapshot.debian.org/$base/$archive/$t"
 fi
