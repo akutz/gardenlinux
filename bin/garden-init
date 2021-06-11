@@ -221,11 +221,11 @@ fi
 	fi
 ' -- "$include_bootstrap"
 
+set -x
 tmp=$(mktemp -d -p $targetDir)
 if [ "${include_wget}" != "" ]; then
 	wget --show-progress --progress=bar:force -P$tmp $include_wget
 fi
-set -x
 
 # INITRD="No" - really hackish solution to skip ramdisk generation
 [ "${include_aptfile}" != "" ] && 
