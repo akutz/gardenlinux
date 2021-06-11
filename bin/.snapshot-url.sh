@@ -19,7 +19,7 @@ done
 timestamp="${1:-}"; shift || eusage 'missing timestamp'
 archive="${1:-debian}"; shift || true
 base="${1:-archive}"
-escaped_archive="$(./urlescape ${archive})"
+escaped_archive="$(${thisDir}/urlescape ${archive})"
 
 t="$(date --date "$timestamp" '+%Y%m%dT%H%M%SZ')"
 
