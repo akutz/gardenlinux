@@ -15,7 +15,7 @@ if parsed.netloc != GARDENLINUX_SNAPSHOT_CACHE_URL:
     print(urllib.parse.urlunparse(parsed))
     sys.exit(0)
 
-parsed = parsed._replace(path=urllib.parse.quote(parsed.path))
+parsed = parsed._replace(path=urllib.parse.quote(parsed.path.replace('+', '')))
 
 print(urllib.parse.urlunparse(parsed))
 sys.exit(0)
