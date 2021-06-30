@@ -372,7 +372,7 @@ def build_make_cert_step(
             inline_script='''
 set -e
 set -x
-cd $(params.repodir)/cert
+cd $(params.repo_dir)/cert
 # Note: that make will also build cfssl which was here done in the previous step
 # it will skip this step as it already present, this is a bit fragile
 make
