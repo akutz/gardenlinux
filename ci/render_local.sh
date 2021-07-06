@@ -13,11 +13,14 @@ gardenlinux_dir=$repo_root
 branch_name="ci-dev"
 # branch_name="main"
 flavour_set='jens' # 'all'     # -> $gardenlinux_dir/flavours.yaml
+# flavour_set='all'
+
 git_url='https://github.com/gardenlinux/gardenlinux.git'
 # git_url='https://github.com/jensh007/gardenlinux.git'
 # git_url=`git config --get remote.origin.url`
 oci_path='eu.gcr.io/gardener-project/test/gardenlinux-test'
 tekton_namespace='jens'
+disable_notifications='true'
 
 export PATH="${PATH}:${bin_dir}"
 
@@ -65,17 +68,31 @@ pipeline_run="$PWD/pipeline_run.yaml"
 rendered_task="$PWD/rendered_task.yaml"
 
 # create pipeline-run for current commit
-ci/render_pipeline_run.py $EXTRA_ARGS \
-  --branch "${branch_name}" \
-  --committish "${head_commit}" \
-  --cicd-cfg 'default' \
-  --flavour-set "${flavour_set}" \
-  --promote-target "${promote_target}" \
-  --publishing-action "${publishing_actions}" \
-  --git-url "${git_url}" \
-  --oci-path "${oci_path}" \
-  --outfile "${pipeline_run}"
-
+if  [[ ${disable_notifications} == 'true' ]]; then
+  ci/render_pipeline_run.py $EXTRA_ARGS \
+    --branch "${branch_name}" \
+    --committish "${head_commit}" \
+    --cicd-cfg 'default' \
+    --flavour-set "${flavour_set}" \
+    --promote-target "${promote_target}" \
+    --publishing-action "${publishing_actions}" \
+    --git-url "${git_url}" \
+    --oci-path "${oci_path}" \
+    --outfile "${pipeline_run}" \
+    --disable-notifications
+else
+  ci/render_pipeline_run.py $EXTRA_ARGS \
+    --branch "${branch_name}" \
+    --committish "${head_commit}" \
+    --cicd-cfg 'default' \
+    --flavour-set "${flavour_set}" \
+    --promote-target "${promote_target}" \
+    --publishing-action "${publishing_actions}" \
+    --git-url "${git_url}" \
+    --oci-path "${oci_path}" \
+    --outfile "${pipeline_run}"
+fi
+ 
 ci/render_pipelines.py \
   --pipeline_cfg "${pipeline_cfg}" \
   --flavour-set "${flavour_set}" \
@@ -92,8 +109,8 @@ for manifest in \
   "${outfile}" \
   "${pipeline_run}"
 do
-  kubectl apply -n "${tekton_namespace}" -f "${manifest}"
-  # echo "Skip applying generated yamls"
+  #kubectl apply -n "${tekton_namespace}" -f "${manifest}"
+  echo "Skip applying generated yamls"
 done
 
 echo 'done: rendering yamls for current commit'
