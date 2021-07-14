@@ -376,6 +376,14 @@ def build_task(
         description='the container image for gardenlinux build (dynamically created)',
     )
 
+    build_cd_step = steps.create_component_descriptor_step(
+        repo_dir=_repodir,
+        committish=committish,
+        version=version,
+        env_vars=env_vars,
+        volume_mounts=volume_mounts,
+    )
+
     clone_step = steps.clone_step(
         committish=committish,
         git_url=giturl,
@@ -460,6 +468,7 @@ def build_task(
                 version,
             ],
             steps=[
+                build_cd_step,
                 clone_step,
                 pre_build_step,
                 build_image_step,

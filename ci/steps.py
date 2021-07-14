@@ -568,6 +568,31 @@ def build_base_image_step(
     )
 
 
+def create_component_descriptor_step(
+    repo_dir: tkn.model.NamedParam,
+    gardenversion: tkn.model.NamedParam,
+    committish: tkn.model.NamedParam,
+    env_vars: typing.List[typing.Dict] = [],
+    volume_mounts: typing.List[typing.Dict] = [],
+):
+    return tkn.model.TaskStep(
+        name='basebuild',
+        image=KANIKO_IMAGE,
+        script=task_step_script(
+            path=os.path.join(steps_dir, 'component_descriptor.py'),
+            script_type=ScriptType.PYTHON3,
+            callable='build_component_descriptor',
+            repo_path_param=repo_dir,
+            params=[
+                gardenversion,
+                committish,
+            ],
+        ),
+        volumeMounts=volume_mounts,
+        env=env_vars,
+    )
+
+
 def notify_step(
     additional_recipients: tkn.model.NamedParam,
     cicd_cfg_name: tkn.model.NamedParam,
@@ -576,7 +601,7 @@ def notify_step(
     namespace: tkn.model.NamedParam,
     only_recipients: tkn.model.NamedParam,
     pipeline_name: tkn.model.NamedParam,
-    pipeline_run_name: tkn.model.NamedParam,    
+    pipeline_run_name: tkn.model.NamedParam,
     repo_dir: tkn.model.NamedParam,
     status_dict_str: tkn.model.NamedParam,
     env_vars: typing.List[typing.Dict] = [],
